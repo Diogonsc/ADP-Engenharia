@@ -1,0 +1,164 @@
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router";
+import { ArrowRight, Menu, X } from "lucide-react";
+import { SectionLink } from "@/components/section-link";
+import { Button } from "@/components/ui/button";
+import { useActiveSection } from "@/hooks/use-active-section";
+import { SECTION_IDS } from "@/lib/sections";
+import { containerPx } from "@/lib/layout";
+import { cn } from "@/lib/utils";
+import logo from "../assets/logo.png";
+
+const navLinks = [
+    { sectionId: SECTION_IDS.partners, label: "Parceiros" },
+  { sectionId: SECTION_IDS.about, label: "Sobre" },
+  { sectionId: SECTION_IDS.services, label: "Serviços" },
+  { sectionId: SECTION_IDS.process, label: "Processos" },
+  { sectionId: SECTION_IDS.projects, label: "Projetos" },
+  { sectionId: SECTION_IDS.articles, label: "Artigos" },
+  { sectionId: SECTION_IDS.contact, label: "Contato" },
+] as const;
+
+function NavbarCta({
+  className,
+  fullWidth,
+  onNavigate,
+}: {
+  className?: string;
+  fullWidth?: boolean;
+  onNavigate?: () => void;
+}) {
+  return (
+    <Button asChild className={cn(className, fullWidth && "w-full")}>
+      <Link
+        to={{ pathname: "/", hash: SECTION_IDS.contact }}
+        onClick={onNavigate}
+      >
+        Falar com um engenheiro
+        <ArrowRight className="size-3.5" aria-hidden />
+      </Link>
+    </Button>
+  );
+}
+
+export function Header() {
+  const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const activeSection = useActiveSection();
+  const isArticlesPage = location.pathname.startsWith("/articles");
+  const hasSolidBackground = isScrolled || isArticlesPage;
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
+  const closeMenu = () => setIsMenuOpen(false);
+
+  return (
+    <header
+      className={cn(
+        "navbar fixed inset-x-0 top-0 z-[1000] transition-[background,box-shadow] duration-300",
+        hasSolidBackground
+          ? "scrolled bg-[rgba(17,18,16,0.96)] shadow-[0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[12px]"
+          : "bg-transparent",
+      )}
+    >
+      <div
+        className={cn(
+          "flex h-[60px] items-center justify-between gap-3 md:h-[68px]",
+          containerPx,
+        )}
+      >
+        <Link
+          to="/"
+          className="flex min-w-0 shrink items-center gap-2 sm:gap-3"
+          aria-label="ADP Engenharia — início"
+          onClick={closeMenu}
+        >
+          <img
+            src={logo}
+            alt=""
+            className="size-8 shrink-0 object-contain sm:size-9"
+            aria-hidden
+          />
+          <span className="truncate font-display text-base font-semibold text-white sm:text-lg">
+            ADP Engenharia
+          </span>
+        </Link>
+
+        <nav
+          className="navbar__links hidden items-center gap-6 lg:flex xl:gap-7"
+          aria-label="Navegação principal"
+        >
+          {navLinks.map(({ sectionId, label }) => (
+            <SectionLink
+              key={sectionId}
+              sectionId={sectionId}
+              label={label}
+              variant="navbar"
+              isActive={activeSection === sectionId}
+            />
+          ))}
+          <NavbarCta />
+        </nav>
+
+        <Button
+          type="button"
+          variant="icon-ghost"
+          size="none"
+          className="lg:hidden"
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-nav"
+          aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+          onClick={() => setIsMenuOpen((open) => !open)}
+        >
+          {isMenuOpen ? (
+            <X className="size-6" aria-hidden />
+          ) : (
+            <Menu className="size-6" aria-hidden />
+          )}
+        </Button>
+      </div>
+
+      <nav
+        id="mobile-nav"
+        className={cn(
+          "absolute inset-x-0 top-full max-h-[calc(100dvh-var(--header-height))] overflow-y-auto bg-[rgba(17,18,16,0.97)] lg:hidden",
+          containerPx,
+          isMenuOpen ? "block" : "hidden",
+        )}
+        aria-label="Navegação mobile"
+        aria-hidden={!isMenuOpen}
+      >
+        <ul className="flex flex-col py-4">
+          {navLinks.map(({ sectionId, label }) => (
+            <li key={sectionId}>
+              <SectionLink
+                sectionId={sectionId}
+                label={label}
+                variant="mobile"
+                isActive={activeSection === sectionId}
+                onNavigate={closeMenu}
+                className="block py-6 text-lg"
+              />
+            </li>
+          ))}
+          <li className="pt-4">
+            <NavbarCta fullWidth onNavigate={closeMenu} />
+          </li>
+        </ul>
+      </nav>
+    </header>
+  );
+}
