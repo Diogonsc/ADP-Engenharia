@@ -38,7 +38,7 @@ export function BackToTop() {
       title="Voltar ao topo"
       onClick={scrollToTop}
       className={cn(
-        "fixed right-6 bottom-6 z-999 shadow-lg transition-all duration-300",
+        "fixed right-6 bottom-24 z-999 shadow-lg transition-all duration-300 sm:bottom-[6.5rem]",
         isVisible
           ? "pointer-events-auto translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0",

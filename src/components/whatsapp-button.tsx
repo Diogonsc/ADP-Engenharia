@@ -54,7 +54,7 @@ export function WhatsAppButton() {
   };
 
   return (
-    <div className="whatsapp-widget fixed right-6 bottom-16 z-998 sm:bottom-[4.5rem]">
+    <div className="whatsapp-widget fixed right-6 bottom-6 z-998">
       {showTooltip && (
         <div
           className="whatsapp-modal animate-whatsapp-tooltip"
