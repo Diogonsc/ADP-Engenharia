@@ -20,7 +20,7 @@ function checkBusinessHours() {
 }
 
 export function WhatsAppButton() {
-  const [showTooltip, setShowTooltip] = useState(true);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const { trackConversion } = useGtag();
 
@@ -32,7 +32,7 @@ export function WhatsAppButton() {
     }, 60_000);
 
     const showTimer = setTimeout(() => setShowTooltip(true), 3000);
-    const hideTimer = setTimeout(() => setShowTooltip(true), 13_000);
+    const hideTimer = setTimeout(() => setShowTooltip(false), 13_000);
 
     return () => {
       clearInterval(interval);
@@ -50,7 +50,7 @@ export function WhatsAppButton() {
     });
 
     openWhatsApp(WHATSAPP_MESSAGE);
-    setShowTooltip(true);
+    setShowTooltip(false);
   };
 
   return (
