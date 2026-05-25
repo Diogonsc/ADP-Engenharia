@@ -1,3 +1,4 @@
+import { BackToTop } from "@/components/back-to-top";
 import { Header } from "@/components/header";
 import { useScrollAnimate } from "@/hooks/use-scroll-animate";
 import { Outlet, useLocation } from "react-router";
@@ -12,6 +13,7 @@ export function RootLayout() {
       <main className="flex-1">
         <Outlet />
       </main>
+      <BackToTop />
     </div>
   );
 }
