@@ -1081,7 +1081,7 @@ html {
 
 .whatsapp-modal {
   position: relative;
-  margin-bottom: 0.125rem;
+  margin-bottom: 0.5rem;
   max-width: min(20rem, calc(100vw - 3rem));
 }
 
@@ -1090,7 +1090,7 @@ html {
   position: absolute;
   right: 1.25rem;
   bottom: -0.125rem;
-  z-index: 3;
+  z-index: -1;
   width: 0.875rem;
   height: 0.875rem;
   rotate: 45deg;
