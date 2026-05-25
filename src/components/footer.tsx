@@ -10,7 +10,7 @@ import { SectionLink } from "@/components/section-link";
 import { SECTION_IDS } from "@/lib/sections";
 import { container, containerPx } from "@/lib/layout";
 import { cn } from "@/lib/utils";
-import logo from "../assets/logo.png";
+import { SiteLogo } from "@/components/site-logo";
 
 const navLinks = [
   { sectionId: SECTION_IDS.about, label: "Sobre" },
@@ -69,12 +69,7 @@ export function Footer() {
               className="flex items-center gap-3"
               aria-label="ADP Engenharia — início"
             >
-              <img
-                src={logo}
-                alt=""
-                className="size-9 shrink-0 object-contain"
-                aria-hidden
-              />
+              <SiteLogo className="size-9 shrink-0 object-contain" />
               <span className="font-display text-lg font-semibold text-white">
                 ADP Engenharia
               </span>

@@ -84,6 +84,7 @@ export function Projects() {
                   alt={project.title}
                   className="h-full w-full object-cover"
                   loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 flex flex-col justify-end bg-linear-to-t from-[rgba(17,18,16,0.8)] via-transparent to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
                   <span className="text-xs text-white/80">{project.type}</span>

@@ -1,21 +1,6 @@
 import { RootLayout } from "@/layouts/root-layout";
-import { AdminLayout } from "@/layouts/admin-layout";
 import { ProtectedRoute } from "@/components/protected-route";
-import { LandingPage } from "@/pages/landing-page";
-import { ArticlesPage } from "@/pages/articles-page";
-import { ArticlePage } from "@/pages/article-page";
-import { ProjectsPage } from "@/pages/projects-page";
 import { createBrowserRouter, Navigate } from "react-router";
-import { AdminLoginPage } from "@/pages/admin/login";
-import { AdminArticlesPage } from "@/pages/admin/articles/index";
-import { AdminArticleCreatePage } from "@/pages/admin/articles/new";
-import { AdminArticleViewPage } from "@/pages/admin/articles/view";
-import { AdminArticleEditPage } from "@/pages/admin/articles/edit";
-import { AdminProjectsPage } from "@/pages/admin/projects/index";
-import { AdminProjectCreatePage } from "@/pages/admin/projects/new";
-import { AdminProjectViewPage } from "@/pages/admin/projects/view";
-import { AdminProjectEditPage } from "@/pages/admin/projects/edit";
-import { NotFoundPage } from "@/pages/not-found-page";
 
 export const router = createBrowserRouter([
   {
@@ -23,32 +8,50 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <LandingPage />,
+        lazy: async () => {
+          const { LandingPage } = await import("@/pages/landing-page");
+          return { Component: LandingPage };
+        },
       },
       {
         path: "/articles",
-        element: <ArticlesPage />,
+        lazy: async () => {
+          const { ArticlesPage } = await import("@/pages/articles-page");
+          return { Component: ArticlesPage };
+        },
       },
       {
         path: "/articles/:slug",
-        element: <ArticlePage />,
+        lazy: async () => {
+          const { ArticlePage } = await import("@/pages/article-page");
+          return { Component: ArticlePage };
+        },
       },
       {
         path: "/projects",
-        element: <ProjectsPage />,
+        lazy: async () => {
+          const { ProjectsPage } = await import("@/pages/projects-page");
+          return { Component: ProjectsPage };
+        },
       },
     ],
   },
   {
     path: "/admin/login",
-    element: <AdminLoginPage />,
+    lazy: async () => {
+      const { AdminLoginPage } = await import("@/pages/admin/login");
+      return { Component: AdminLoginPage };
+    },
   },
   {
     element: <ProtectedRoute />,
     children: [
       {
         path: "/admin",
-        element: <AdminLayout />,
+        lazy: async () => {
+          const { AdminLayout } = await import("@/layouts/admin-layout");
+          return { Component: AdminLayout };
+        },
         children: [
           {
             index: true,
@@ -56,35 +59,75 @@ export const router = createBrowserRouter([
           },
           {
             path: "articles",
-            element: <AdminArticlesPage />,
+            lazy: async () => {
+              const { AdminArticlesPage } = await import(
+                "@/pages/admin/articles/index"
+              );
+              return { Component: AdminArticlesPage };
+            },
           },
           {
             path: "articles/new",
-            element: <AdminArticleCreatePage />,
+            lazy: async () => {
+              const { AdminArticleCreatePage } = await import(
+                "@/pages/admin/articles/new"
+              );
+              return { Component: AdminArticleCreatePage };
+            },
           },
           {
             path: "articles/:id",
-            element: <AdminArticleViewPage />,
+            lazy: async () => {
+              const { AdminArticleViewPage } = await import(
+                "@/pages/admin/articles/view"
+              );
+              return { Component: AdminArticleViewPage };
+            },
           },
           {
             path: "articles/:id/edit",
-            element: <AdminArticleEditPage />,
+            lazy: async () => {
+              const { AdminArticleEditPage } = await import(
+                "@/pages/admin/articles/edit"
+              );
+              return { Component: AdminArticleEditPage };
+            },
           },
           {
             path: "projects",
-            element: <AdminProjectsPage />,
+            lazy: async () => {
+              const { AdminProjectsPage } = await import(
+                "@/pages/admin/projects/index"
+              );
+              return { Component: AdminProjectsPage };
+            },
           },
           {
             path: "projects/new",
-            element: <AdminProjectCreatePage />,
+            lazy: async () => {
+              const { AdminProjectCreatePage } = await import(
+                "@/pages/admin/projects/new"
+              );
+              return { Component: AdminProjectCreatePage };
+            },
           },
           {
             path: "projects/:id",
-            element: <AdminProjectViewPage />,
+            lazy: async () => {
+              const { AdminProjectViewPage } = await import(
+                "@/pages/admin/projects/view"
+              );
+              return { Component: AdminProjectViewPage };
+            },
           },
           {
             path: "projects/:id/edit",
-            element: <AdminProjectEditPage />,
+            lazy: async () => {
+              const { AdminProjectEditPage } = await import(
+                "@/pages/admin/projects/edit"
+              );
+              return { Component: AdminProjectEditPage };
+            },
           },
         ],
       },
@@ -92,6 +135,9 @@ export const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <NotFoundPage />,
+    lazy: async () => {
+      const { NotFoundPage } = await import("@/pages/not-found-page");
+      return { Component: NotFoundPage };
+    },
   },
 ]);

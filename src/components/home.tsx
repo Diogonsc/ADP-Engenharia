@@ -6,7 +6,8 @@ import { useHeroParallax } from "@/hooks/use-hero-parallax";
 import { SECTION_IDS } from "@/lib/sections";
 import { container, containerPx, overline, sectionScroll } from "@/lib/layout";
 import { cn } from "@/lib/utils";
-import heroImage from "../assets/hero-image.jpg";
+import { ResponsiveImage } from "@/components/responsive-image";
+import { heroImage } from "@/lib/optimized-images";
 
 const proofItems = [
   { number: "15+", label: "anos de experiência" },
@@ -24,9 +25,18 @@ export function Home() {
       className={cn("hero relative min-h-[108dvh]", sectionScroll)}
     >
       <div ref={mediaRef} className="hero__media" aria-hidden>
-        <img
-          src={heroImage}
+        <ResponsiveImage
           alt=""
+          width={heroImage.width}
+          height={heroImage.height}
+          sizes={heroImage.sizes}
+          sources={[
+            { type: "image/avif", ...heroImage.avif },
+            { type: "image/webp", ...heroImage.webp },
+          ]}
+          fallback={heroImage.webp}
+          loading="eager"
+          fetchPriority="high"
           className="hero__image h-full w-full object-cover object-[center_28%] grayscale"
         />
       </div>

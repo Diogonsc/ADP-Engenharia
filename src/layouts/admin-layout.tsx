@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
@@ -170,7 +171,9 @@ export function AdminLayout() {
               <AdminBreadcrumb />
             </header>
             <main className="flex flex-1 flex-col gap-6 p-4 md:p-6">
-              <Outlet />
+              <Suspense fallback={null}>
+                <Outlet />
+              </Suspense>
             </main>
           </SidebarInset>
         </SidebarProvider>

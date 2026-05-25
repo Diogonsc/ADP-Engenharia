@@ -89,6 +89,7 @@ export function ArticlesSection() {
                   alt={featured.title}
                   className="h-full w-full object-cover transition duration-400 group-hover:scale-[1.04]"
                   loading="lazy"
+                  decoding="async"
                 />
               )}
               <span className="absolute top-3 left-3 rounded-sm bg-bg-dark px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-white/85">
@@ -126,6 +127,7 @@ export function ArticlesSection() {
                       alt={article.title}
                       className="h-full w-full object-cover transition duration-400 group-hover:scale-[1.04]"
                       loading="lazy"
+                      decoding="async"
                     />
                   )}
                 </div>

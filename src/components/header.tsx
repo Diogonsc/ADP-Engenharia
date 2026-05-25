@@ -7,7 +7,7 @@ import { useActiveSection } from "@/hooks/use-active-section";
 import { SECTION_IDS } from "@/lib/sections";
 import { containerPx } from "@/lib/layout";
 import { cn } from "@/lib/utils";
-import logo from "../assets/logo.png";
+import { SiteLogo } from "@/components/site-logo";
 
 const navLinks = [
     { sectionId: SECTION_IDS.partners, label: "Parceiros" },
@@ -89,12 +89,7 @@ export function Header() {
           aria-label="ADP Engenharia — início"
           onClick={closeMenu}
         >
-          <img
-            src={logo}
-            alt=""
-            className="size-8 shrink-0 object-contain sm:size-9"
-            aria-hidden
-          />
+          <SiteLogo className="size-8 shrink-0 object-contain sm:size-9" />
           <span className="truncate font-display text-base font-semibold text-white sm:text-lg">
             ADP Engenharia
           </span>

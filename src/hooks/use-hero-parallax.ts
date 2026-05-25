@@ -15,6 +15,8 @@ export function useHeroParallax(
 
     let frame = 0;
 
+    media.style.willChange = "transform, opacity";
+
     const update = () => {
       const scrollY = window.scrollY;
       const progress = Math.min(scrollY / window.innerHeight, 1);
@@ -39,6 +41,7 @@ export function useHeroParallax(
       cancelAnimationFrame(frame);
       media.style.transform = "";
       media.style.opacity = "";
+      media.style.willChange = "";
     };
   }, [mediaRef]);
 }

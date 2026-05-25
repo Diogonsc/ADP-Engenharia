@@ -83,8 +83,11 @@ export function Team() {
                 <img
                   src={member.image}
                   alt={member.name}
+                  width={400}
+                  height={300}
                   className="h-full w-full object-cover object-top"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               <CardContent className="flex flex-col p-5 sm:p-6">
