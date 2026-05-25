@@ -15,6 +15,7 @@ const navLinks = [
   { sectionId: SECTION_IDS.services, label: "Serviços" },
   { sectionId: SECTION_IDS.process, label: "Processos" },
   { sectionId: SECTION_IDS.projects, label: "Projetos" },
+  { sectionId: SECTION_IDS.team, label: "Equipe" },
   { sectionId: SECTION_IDS.articles, label: "Artigos" },
   { sectionId: SECTION_IDS.contact, label: "Contato" },
 ] as const;

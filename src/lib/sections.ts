@@ -4,6 +4,7 @@ export const SECTION_IDS = {
   services: "services",
   process: "process",
   projects: "projects",
+  team: "team",
   partners: "partners",
   methodology: "methodology",
   articles: "articles",

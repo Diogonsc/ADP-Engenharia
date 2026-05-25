@@ -3,6 +3,7 @@ import { About } from "@/components/about";
 import { Services } from "@/components/services";
 import { Process } from "@/components/process";
 import { Projects } from "@/components/projects";
+import { Team } from "@/components/team";
 import { Methodology } from "@/components/methodology";
 import { ArticlesSection } from "@/components/articles";
 import { ClientsMarquee } from "@/components/clients-marquee";
@@ -22,6 +23,7 @@ export function LandingPage() {
       <Services />
       <Process />
       <Projects />
+      <Team />
       <Methodology />
       <ArticlesSection />
       <CtaFinal />
