@@ -4,7 +4,40 @@ import {
   type ArticleFormData,
   type Article,
 } from "@/data/articles";
+import {
+  FeaturedLimitError,
+  MAX_FEATURED_ARTICLES,
+} from "@/lib/featured";
 import { optimizeImage, validateImageBeforeOptimize } from "@/lib/image";
+
+async function countFeaturedArticles(excludeId?: number): Promise<number> {
+  let query = supabase
+    .from("articles")
+    .select("*", { count: "exact", head: true })
+    .eq("featured", true);
+
+  if (excludeId !== undefined) {
+    query = query.neq("id", excludeId);
+  }
+
+  const { count, error } = await query;
+  if (error) throw error;
+  return count ?? 0;
+}
+
+async function assertCanSetArticleFeatured(
+  featured: boolean,
+  articleId?: number,
+): Promise<void> {
+  if (!featured) return;
+
+  const count = await countFeaturedArticles(articleId);
+  if (count >= MAX_FEATURED_ARTICLES) {
+    throw new FeaturedLimitError(
+      `No máximo ${MAX_FEATURED_ARTICLES} artigos podem estar em destaque na página inicial.`,
+    );
+  }
+}
 
 export type UploadPhase = "validating" | "optimizing" | "uploading" | "done";
 
@@ -23,6 +56,21 @@ export async function fetchPublishedArticles(): Promise<Article[]> {
     .select("*")
     .eq("status", "published")
     .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return (data ?? []).map(mapRowToArticle);
+}
+
+export async function fetchFeaturedPublishedArticles(
+  limit = MAX_FEATURED_ARTICLES,
+): Promise<Article[]> {
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("status", "published")
+    .eq("featured", true)
+    .order("created_at", { ascending: false })
+    .limit(limit);
 
   if (error) throw error;
   return (data ?? []).map(mapRowToArticle);
@@ -70,6 +118,8 @@ export async function fetchArticleById(id: number): Promise<Article | null> {
 }
 
 export async function createArticle(formData: ArticleFormData): Promise<Article> {
+  await assertCanSetArticleFeatured(formData.featured);
+
   const { data, error } = await supabase
     .from("articles")
     .insert([
@@ -81,6 +131,7 @@ export async function createArticle(formData: ArticleFormData): Promise<Article>
         category: formData.category,
         image_url: formData.image || null,
         status: formData.status,
+        featured: formData.featured,
       },
     ])
     .select()
@@ -94,6 +145,8 @@ export async function updateArticle(
   id: number,
   formData: ArticleFormData,
 ): Promise<Article> {
+  await assertCanSetArticleFeatured(formData.featured, id);
+
   const { data, error } = await supabase
     .from("articles")
     .update({
@@ -104,7 +157,25 @@ export async function updateArticle(
       category: formData.category,
       image_url: formData.image || null,
       status: formData.status,
+      featured: formData.featured,
     })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return mapRowToArticle(data);
+}
+
+export async function setArticleFeatured(
+  id: number,
+  featured: boolean,
+): Promise<Article> {
+  await assertCanSetArticleFeatured(featured, id);
+
+  const { data, error } = await supabase
+    .from("articles")
+    .update({ featured })
     .eq("id", id)
     .select()
     .single();

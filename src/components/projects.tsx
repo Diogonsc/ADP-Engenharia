@@ -12,7 +12,7 @@ import {
 import { ProjectDialog } from "@/components/project-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { fetchProjects } from "@/lib/projects-api";
+import { fetchFeaturedProjects } from "@/lib/projects-api";
 import { type Project, projectFilters } from "@/data/projects";
 import { SECTION_IDS } from "@/lib/sections";
 import { cn } from "@/lib/utils";
@@ -23,7 +23,7 @@ export function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
-    fetchProjects().then(setProjects);
+    fetchFeaturedProjects().then(setProjects);
   }, []);
 
   const visibleProjects = projects.filter(
@@ -52,9 +52,7 @@ export function Projects() {
             </p>
           </div>
           <Button asChild variant="ghost" className="hidden md:inline-flex">
-            <Link to={{ pathname: "/", hash: SECTION_IDS.projects }}>
-              Ver todos os projetos →
-            </Link>
+            <Link to="/projects">Ver todos →</Link>
           </Button>
         </div>
 
@@ -120,9 +118,7 @@ export function Projects() {
 
         <div className="mt-8 flex justify-center md:hidden">
           <Button asChild variant="ghost" className="w-full">
-            <Link to={{ pathname: "/", hash: SECTION_IDS.projects }}>
-              Ver todos os projetos
-            </Link>
+            <Link to="/projects">Ver todos os projetos</Link>
           </Button>
         </div>
       </div>

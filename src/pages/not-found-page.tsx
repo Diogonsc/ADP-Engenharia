@@ -25,6 +25,9 @@ export function NotFoundPage() {
             <Link to="/">Ir para a página inicial</Link>
           </Button>
           <Button asChild variant="outline">
+            <Link to="/projects">Ver projetos</Link>
+          </Button>
+          <Button asChild variant="outline">
             <Link to="/articles">Ver artigos</Link>
           </Button>
         </div>

@@ -13,6 +13,7 @@ export type Article = {
   readTime: string;
   image: string;
   status: ArticleStatus;
+  featured: boolean;
 };
 
 export const articleCategories: {
@@ -33,6 +34,7 @@ export type ArticleFormData = {
   category: ArticleCategory;
   image: string;
   status: ArticleStatus;
+  featured: boolean;
 };
 
 export function slugify(value: string): string {
@@ -69,6 +71,7 @@ export function mapRowToArticle(row: {
   category: string;
   image_url: string | null;
   status: string;
+  featured?: boolean;
   created_at: string;
 }): Article {
   const category = row.category as ArticleCategory;
@@ -85,6 +88,7 @@ export function mapRowToArticle(row: {
     readTime: estimateReadTime(row.content ?? ""),
     image: row.image_url ?? "",
     status: row.status as ArticleStatus,
+    featured: row.featured ?? false,
   };
 }
 
@@ -106,5 +110,6 @@ export function articleFormToPreview(
     readTime: estimateReadTime(form.content),
     image: form.image,
     status: form.status,
+    featured: form.featured,
   };
 }

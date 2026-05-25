@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ProjectDialogMedia } from "@/components/project-dialog-media";
 import type { Project } from "@/data/projects";
 import { SECTION_IDS } from "@/lib/sections";
 import { cn } from "@/lib/utils";
@@ -40,17 +41,12 @@ export function ProjectDialog({
         )}
         showCloseButton
       >
-        <div className="project-card__image relative aspect-video overflow-hidden">
-          <img
-            src={activeProject.image}
-            alt={activeProject.title}
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-[rgba(17,18,16,0.55)] via-transparent to-transparent" />
-          <span className="absolute bottom-4 left-6 rounded-sm bg-bg-dark/90 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-white/90 backdrop-blur-sm">
-            {activeProject.type}
-          </span>
-        </div>
+        <ProjectDialogMedia
+          title={activeProject.title}
+          type={activeProject.type}
+          image={activeProject.image}
+          videoUrl={activeProject.videoUrl}
+        />
 
         <div className="space-y-6 p-6 sm:p-8">
           <DialogHeader className="gap-3 text-left">

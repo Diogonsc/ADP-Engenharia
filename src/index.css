@@ -477,49 +477,37 @@
   }
 
   /* Processos */
-  .processes[data-active="subestacao"] .process__step-number {
+  .process__group[data-active="subestacao"] .process__step-number {
     background: rgba(61, 122, 71, 0.1);
     color: #3d7a47;
     border: 1px solid rgba(61, 122, 71, 0.2);
   }
 
-  .processes[data-active="subestacao"] .process__step-connector {
+  .process__group[data-active="subestacao"] .process__step-connector {
     background: #3d7a47;
     opacity: 0.25;
   }
 
-  .processes[data-active="linha"] .process__step-number {
+  .process__group[data-active="linha"] .process__step-number {
     background: rgba(24, 95, 165, 0.1);
     color: #185fa5;
     border: 1px solid rgba(24, 95, 165, 0.2);
   }
 
-  .processes[data-active="linha"] .process__step-connector {
+  .process__group[data-active="linha"] .process__step-connector {
     background: #185fa5;
     opacity: 0.25;
   }
 
-  .processes[data-active="detalhamento"] .process__step-number {
+  .process__group[data-active="detalhamento"] .process__step-number {
     background: rgba(122, 92, 61, 0.1);
     color: #7a5c3d;
     border: 1px solid rgba(122, 92, 61, 0.2);
   }
 
-  .processes[data-active="detalhamento"] .process__step-connector {
+  .process__group[data-active="detalhamento"] .process__step-connector {
     background: #7a5c3d;
     opacity: 0.25;
-  }
-
-  .processes[data-active="subestacao"] .process__tab.active {
-    border-bottom: 2px solid #3d7a47;
-  }
-
-  .processes[data-active="linha"] .process__tab.active {
-    border-bottom: 2px solid #185fa5;
-  }
-
-  .processes[data-active="detalhamento"] .process__tab.active {
-    border-bottom: 2px solid #7a5c3d;
   }
 
   .process__step-number {
@@ -533,8 +521,8 @@
     transition: background 0.4s;
   }
 
-  .process__tab.active {
-    border-bottom: 2px solid transparent;
+  .process__step-connector--vertical {
+    opacity: 0.25;
   }
 
   /* Projetos */
@@ -581,6 +569,11 @@
   .project-card:hover .project-card__image img {
     filter: grayscale(0%) contrast(1);
     transform: scale(1.04);
+  }
+
+  .project-dialog__media img {
+    filter: none;
+    transform: none;
   }
 
   /* Diferenciais */

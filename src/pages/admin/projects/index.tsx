@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { EyeIcon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { DeleteProjectDialog } from "@/components/admin/delete-project-dialog";
+import { FeaturedToggleButton } from "@/components/admin/featured-toggle-button";
+import { Badge } from "@/components/ui/badge";
+import { MAX_FEATURED_PROJECTS } from "@/lib/featured";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,7 +26,8 @@ import type { Project } from "@/data/projects";
 
 export function AdminProjectsPage() {
   const navigate = useNavigate();
-  const { projects, loading, error } = useProjects();
+  const { projects, loading, error, setProjectFeatured } = useProjects();
+  const featuredCount = projects.filter((project) => project.featured).length;
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
 
   if (loading) {
@@ -48,7 +52,8 @@ export function AdminProjectsPage() {
             Projetos
           </h1>
           <p className="mt-1 text-sm text-text-secondary">
-            Gerencie os projetos exibidos no portfólio.
+            Gerencie os projetos do portfólio. Até {MAX_FEATURED_PROJECTS} podem
+            ficar em destaque na página inicial.
           </p>
         </div>
         <Button asChild>
@@ -66,7 +71,8 @@ export function AdminProjectsPage() {
           </CardTitle>
           <CardDescription>
             {projects.length} projeto{projects.length === 1 ? "" : "s"}{" "}
-            cadastrado{projects.length === 1 ? "" : "s"}.
+            cadastrado{projects.length === 1 ? "" : "s"} · {featuredCount} em
+            destaque na home.
           </CardDescription>
         </CardHeader>
         <CardContent className="px-0 pb-0">
@@ -76,6 +82,7 @@ export function AdminProjectsPage() {
                 <TableHead className="pl-6">Título</TableHead>
                 <TableHead>Tipo</TableHead>
                 <TableHead>Categoria</TableHead>
+                <TableHead>Destaque</TableHead>
                 <TableHead>Ordem</TableHead>
                 <TableHead className="pr-6 text-right">Ações</TableHead>
               </TableRow>
@@ -84,7 +91,7 @@ export function AdminProjectsPage() {
               {projects.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
+                    colSpan={6}
                     className="py-10 text-center text-text-muted"
                   >
                     Nenhum projeto cadastrado ainda.
@@ -109,11 +116,27 @@ export function AdminProjectsPage() {
                         {project.tag}
                       </span>
                     </TableCell>
+                    <TableCell>
+                      {project.featured ? (
+                        <Badge className="rounded-full bg-amber-500/15 px-2.5 py-1 text-[11px] font-semibold normal-case tracking-normal text-amber-700">
+                          Destaque
+                        </Badge>
+                      ) : (
+                        <span className="text-xs text-text-muted">—</span>
+                      )}
+                    </TableCell>
                     <TableCell className="text-sm text-text-muted">
                       {project.order}
                     </TableCell>
                     <TableCell className="pr-6">
                       <div className="flex items-center justify-end gap-1">
+                        <FeaturedToggleButton
+                          featured={project.featured}
+                          label={project.title}
+                          onToggle={(featured) =>
+                            setProjectFeatured(project.id, featured)
+                          }
+                        />
                         <Button
                           variant="ghost"
                           size="icon-sm"

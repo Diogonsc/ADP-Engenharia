@@ -6,6 +6,8 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import { DeleteArticleDialog } from "@/components/admin/delete-article-dialog";
+import { FeaturedToggleButton } from "@/components/admin/featured-toggle-button";
+import { MAX_FEATURED_ARTICLES } from "@/lib/featured";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,7 +31,8 @@ import { useState } from "react";
 
 export function AdminArticlesPage() {
   const navigate = useNavigate();
-  const { articles, loading, error } = useArticles();
+  const { articles, loading, error, setArticleFeatured } = useArticles();
+  const featuredCount = articles.filter((article) => article.featured).length;
   const [articleToDelete, setArticleToDelete] = useState<Article | null>(null);
 
   if (loading) {
@@ -52,7 +55,8 @@ export function AdminArticlesPage() {
             Artigos
           </h1>
           <p className="mt-1 text-sm text-text-secondary">
-            Gerencie os artigos e publicações do blog.
+            Gerencie os artigos e publicações do blog. Até {MAX_FEATURED_ARTICLES}{" "}
+            publicados podem ficar em destaque na página inicial.
           </p>
         </div>
         <Button asChild>
@@ -70,7 +74,8 @@ export function AdminArticlesPage() {
           </CardTitle>
           <CardDescription>
             {articles.length} artigo{articles.length === 1 ? "" : "s"} cadastrado
-            {articles.length === 1 ? "" : "s"}.
+            {articles.length === 1 ? "" : "s"} · {featuredCount} em destaque na
+            home.
           </CardDescription>
         </CardHeader>
         <CardContent className="px-0 pb-0">
@@ -81,6 +86,7 @@ export function AdminArticlesPage() {
                 <TableHead>Categoria</TableHead>
                 <TableHead>Data</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Destaque</TableHead>
                 <TableHead className="pr-6 text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -88,7 +94,7 @@ export function AdminArticlesPage() {
               {articles.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
+                    colSpan={6}
                     className="py-10 text-center text-text-muted"
                   >
                     Nenhum artigo cadastrado ainda.
@@ -127,8 +133,24 @@ export function AdminArticlesPage() {
                           : "Rascunho"}
                       </Badge>
                     </TableCell>
+                    <TableCell>
+                      {article.featured ? (
+                        <Badge className="rounded-full bg-amber-500/15 px-2.5 py-1 text-[11px] font-semibold normal-case tracking-normal text-amber-700">
+                          Destaque
+                        </Badge>
+                      ) : (
+                        <span className="text-xs text-text-muted">—</span>
+                      )}
+                    </TableCell>
                     <TableCell className="pr-6">
                       <div className="flex items-center justify-end gap-1">
+                        <FeaturedToggleButton
+                          featured={article.featured}
+                          label={article.title}
+                          onToggle={(featured) =>
+                            setArticleFeatured(article.id, featured)
+                          }
+                        />
                         <Button
                           variant="ghost"
                           size="icon-sm"

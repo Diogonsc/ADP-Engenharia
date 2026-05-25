@@ -11,6 +11,7 @@ import {
   fetchAllArticles,
   createArticle as apiCreate,
   updateArticle as apiUpdate,
+  setArticleFeatured as apiSetFeatured,
   deleteArticle as apiDelete,
 } from "@/lib/articles-api";
 import { getErrorMessage } from "@/lib/errors";
@@ -22,6 +23,7 @@ type ArticlesContextValue = {
   getArticleById: (id: number) => Article | undefined;
   createArticle: (data: ArticleFormData) => Promise<Article>;
   updateArticle: (id: number, data: ArticleFormData) => Promise<Article>;
+  setArticleFeatured: (id: number, featured: boolean) => Promise<Article>;
   deleteArticle: (id: number) => Promise<void>;
   refetch: () => Promise<void>;
 };
@@ -72,6 +74,12 @@ export function ArticlesProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const setArticleFeatured = useCallback(async (id: number, featured: boolean) => {
+    const updated = await apiSetFeatured(id, featured);
+    setArticles((prev) => prev.map((a) => (a.id === id ? updated : a)));
+    return updated;
+  }, []);
+
   const deleteArticle = useCallback(async (id: number) => {
     await apiDelete(id);
     setArticles((prev) => prev.filter((a) => a.id !== id));
@@ -85,6 +93,7 @@ export function ArticlesProvider({ children }: { children: ReactNode }) {
       getArticleById,
       createArticle,
       updateArticle,
+      setArticleFeatured,
       deleteArticle,
       refetch: load,
     }),
@@ -95,6 +104,7 @@ export function ArticlesProvider({ children }: { children: ReactNode }) {
       getArticleById,
       createArticle,
       updateArticle,
+      setArticleFeatured,
       deleteArticle,
       load,
     ],

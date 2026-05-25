@@ -29,6 +29,10 @@ import {
   type Project,
   type ProjectFormData,
 } from "@/data/projects";
+import { FeaturedField } from "@/components/admin/featured-field";
+import { getErrorMessage } from "@/lib/errors";
+import { MAX_FEATURED_PROJECTS } from "@/lib/featured";
+import { isValidYoutubeUrl } from "@/lib/youtube";
 
 type ProjectFormProps = {
   initialData?: Project;
@@ -44,9 +48,11 @@ function getInitialForm(initial?: Project): ProjectFormData {
     meta: initial?.meta ?? "",
     category: initial?.category ?? "lt",
     image: initial?.image ?? "",
+    videoUrl: initial?.videoUrl ?? "",
     description: initial?.description ?? "",
     highlights: initial?.highlights?.length ? initial.highlights : [""],
     order: initial?.order ?? 0,
+    featured: initial?.featured ?? false,
   };
 }
 
@@ -100,6 +106,9 @@ export function ProjectForm({
     if (filledHighlights.length === 0) {
       next.highlights_items = "Adicione ao menos um item do escopo";
     }
+    if (form.videoUrl.trim() && !isValidYoutubeUrl(form.videoUrl)) {
+      next.videoUrl = "Informe uma URL válida do YouTube";
+    }
 
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -115,6 +124,8 @@ export function ProjectForm({
         ...form,
         highlights: form.highlights.filter((h) => h.trim()),
       });
+    } catch (err) {
+      window.alert(getErrorMessage(err, "Erro ao salvar o projeto."));
     } finally {
       setSubmitting(false);
     }
@@ -223,6 +234,14 @@ export function ProjectForm({
             </div>
           </div>
 
+          <FeaturedField
+            id="featured"
+            checked={form.featured}
+            maxItems={MAX_FEATURED_PROJECTS}
+            entityLabel="Projetos"
+            onChange={(featured) => updateField("featured", featured)}
+          />
+
           <div>
             <Label htmlFor="meta" className={adminLabelClassName}>
               Meta (cliente e período)
@@ -240,6 +259,27 @@ export function ProjectForm({
             value={form.image}
             onChange={(url) => updateField("image", url)}
           />
+
+          <div>
+            <Label htmlFor="videoUrl" className={adminLabelClassName}>
+              Vídeo do YouTube (opcional)
+            </Label>
+            <Input
+              id="videoUrl"
+              type="url"
+              value={form.videoUrl}
+              placeholder="https://www.youtube.com/watch?v=..."
+              className={adminFieldClassName}
+              aria-invalid={!!errors.videoUrl}
+              onChange={(e) => updateField("videoUrl", e.target.value)}
+            />
+            <p className="mt-1.5 text-xs text-text-muted">
+              URL do vídeo exibida no modal do site junto à imagem do projeto.
+            </p>
+            {errors.videoUrl && (
+              <p className="mt-1 text-xs text-destructive">{errors.videoUrl}</p>
+            )}
+          </div>
 
           <div>
             <Label htmlFor="description" className={adminLabelClassName}>

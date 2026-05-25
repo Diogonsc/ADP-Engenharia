@@ -64,6 +64,11 @@ export function AdminArticleViewPage() {
             >
               {article.status === "published" ? "Publicado" : "Rascunho"}
             </Badge>
+            {article.featured && (
+              <Badge className="rounded-full bg-amber-500/15 px-2.5 py-1 text-[11px] font-semibold normal-case tracking-normal text-amber-700">
+                Destaque na home
+              </Badge>
+            )}
             <span className="text-sm text-text-muted">{article.categoryLabel}</span>
             <span className="text-sm text-text-muted">• {article.date}</span>
             <span className="text-sm text-text-muted">• {article.readTime}</span>

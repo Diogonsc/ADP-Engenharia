@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { SECTION_IDS } from "@/lib/sections";
 import {
   container,
@@ -9,7 +8,6 @@ import {
   sectionSubtitle,
   sectionTitle,
 } from "@/lib/layout";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type ProcessStep = {
@@ -18,13 +16,13 @@ type ProcessStep = {
   description: string;
 };
 
-type ProcessTab = {
+type ProcessGroup = {
   id: string;
   label: string;
   steps: ProcessStep[];
 };
 
-const processTabs: ProcessTab[] = [
+const processGroups: ProcessGroup[] = [
   {
     id: "subestacao",
     label: "Subestações",
@@ -120,46 +118,52 @@ const processTabs: ProcessTab[] = [
   },
 ];
 
-function ProcessTimeline({ steps }: { steps: ProcessStep[] }) {
+function ProcessTimeline({
+  steps,
+  labelledBy,
+}: {
+  steps: ProcessStep[];
+  labelledBy?: string;
+}) {
   return (
-    <div className="flex items-start overflow-x-auto pb-2">
+    <ol className="flex flex-col" aria-labelledby={labelledBy}>
       {steps.map((step, index) => (
-        <div key={step.number} className="flex items-start">
-          <div className="flex min-w-[140px] flex-1 flex-col items-center px-2 text-center">
-            <div className="process__step-number relative z-1 mb-3.5 flex size-10 items-center justify-center rounded-full font-display text-[15px] font-bold">
+        <li key={step.number} className="flex gap-4 md:gap-5">
+          <div className="flex flex-col items-center">
+            <div className="process__step-number relative z-1 flex size-10 shrink-0 items-center justify-center rounded-full font-display text-[15px] font-bold md:size-11 md:text-base">
               {step.number}
             </div>
-            <h4 className="mb-1.5 text-[13px] font-semibold leading-snug text-text-primary">
+            {index < steps.length - 1 && (
+              <div
+                className="process__step-connector process__step-connector--vertical my-1 w-px min-h-6 flex-1 md:min-h-8"
+                aria-hidden
+              />
+            )}
+          </div>
+          <div
+            className={cn(
+              "min-w-0 flex-1 pt-1.5",
+              index < steps.length - 1 && "pb-6 md:pb-8",
+            )}
+          >
+            <h4 className="mb-1 text-sm font-semibold leading-snug text-text-primary md:text-[15px]">
               {step.title}
             </h4>
-            <p className="text-xs leading-relaxed text-text-muted">
+            <p className="text-xs leading-relaxed text-text-muted md:text-[13px]">
               {step.description}
             </p>
           </div>
-          {index < steps.length - 1 && (
-            <div
-              className="process__step-connector relative mt-5 h-px w-10 shrink-0"
-              aria-hidden
-            >
-              <span className="absolute -top-[3px] right-0 size-1.5 rotate-45 border-t border-r border-border" />
-            </div>
-          )}
-        </div>
+        </li>
       ))}
-    </div>
+    </ol>
   );
 }
 
 export function Process() {
-  const [activeTab, setActiveTab] = useState(processTabs[0].id);
-  const activeProcess =
-    processTabs.find((tab) => tab.id === activeTab) ?? processTabs[0];
-
   return (
     <section
       id={SECTION_IDS.process}
       className={cn("processes bg-bg-primary", sectionScroll, containerPx, sectionPy)}
-      data-active={activeTab}
     >
       <div className={container}>
         <div className="max-w-2xl" data-animate>
@@ -172,32 +176,33 @@ export function Process() {
         </div>
 
         <div
-          className="mt-12 mb-10 flex w-fit gap-1 rounded-md bg-bg-secondary p-1"
-          role="tablist"
-          aria-label="Tipos de processo"
+          className="mt-12 flex flex-col gap-14 lg:mt-16 lg:grid lg:grid-cols-3 lg:items-start lg:gap-10 xl:gap-12"
+          data-animate
         >
-          {processTabs.map((tab) => (
-            <Button
-              key={tab.id}
-              type="button"
-              role="tab"
-              variant={activeTab === tab.id ? "tab-active" : "tab"}
-              size="tab"
-              aria-selected={activeTab === tab.id}
-              className={cn(
-                "process__tab",
-                activeTab === tab.id && "active",
-              )}
-              data-tab={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.label}
-            </Button>
-          ))}
-        </div>
+          {processGroups.map((group, index) => {
+            const headingId = `process-${group.id}-heading`;
 
-        <div role="tabpanel" data-animate>
-          <ProcessTimeline steps={activeProcess.steps} />
+            return (
+              <article
+                key={group.id}
+                className={cn(
+                  "process__group min-w-0",
+                  index > 0 && "border-t border-border pt-14",
+                  index > 0 && "lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10 xl:pl-12",
+                )}
+                data-active={group.id}
+                aria-labelledby={headingId}
+              >
+                <h3
+                  id={headingId}
+                  className="mb-6 font-display text-xl font-semibold leading-snug text-text-primary lg:mb-8 lg:text-lg xl:text-xl"
+                >
+                  {group.label}
+                </h3>
+                <ProcessTimeline steps={group.steps} labelledBy={headingId} />
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

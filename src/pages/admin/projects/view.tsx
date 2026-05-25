@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router";
 import { ArrowLeftIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { DeleteProjectDialog } from "@/components/admin/delete-project-dialog";
+import { ProjectMedia } from "@/components/project-media";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -75,16 +76,25 @@ export function AdminProjectViewPage() {
       </div>
 
       <Card className="overflow-hidden rounded-lg py-0 shadow-sm">
-        {project.image && (
-          <div className="aspect-video w-full overflow-hidden border-b border-border">
-            <img
-              src={project.image}
-              alt={project.title}
-              className="size-full object-cover"
+        {(project.image || project.videoUrl) && (
+          <div className="border-b border-border">
+            <ProjectMedia
+              title={project.title}
+              type={project.type}
+              image={project.image}
+              videoUrl={project.videoUrl}
             />
           </div>
         )}
         <CardContent className="space-y-6 p-6 md:p-8">
+          <div>
+            <p className="text-xs uppercase tracking-[0.05em] text-text-muted">
+              Destaque na home
+            </p>
+            <p className="mt-1 text-sm text-text-secondary">
+              {project.featured ? "Sim" : "Não"}
+            </p>
+          </div>
           <div>
             <p className="text-xs uppercase tracking-[0.05em] text-text-muted">
               Tipo
@@ -114,6 +124,21 @@ export function AdminProjectViewPage() {
               ))}
             </ul>
           </div>
+          {project.videoUrl && (
+            <div>
+              <p className="text-xs uppercase tracking-[0.05em] text-text-muted">
+                Vídeo (YouTube)
+              </p>
+              <a
+                href={project.videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 block truncate text-sm text-brand hover:underline"
+              >
+                {project.videoUrl}
+              </a>
+            </div>
+          )}
           <div>
             <p className="text-xs uppercase tracking-[0.05em] text-text-muted">
               Ordem de exibição

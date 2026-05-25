@@ -4,6 +4,7 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { LandingPage } from "@/pages/landing-page";
 import { ArticlesPage } from "@/pages/articles-page";
 import { ArticlePage } from "@/pages/article-page";
+import { ProjectsPage } from "@/pages/projects-page";
 import { createBrowserRouter, Navigate } from "react-router";
 import { AdminLoginPage } from "@/pages/admin/login";
 import { AdminArticlesPage } from "@/pages/admin/articles/index";
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: "/articles/:slug",
         element: <ArticlePage />,
+      },
+      {
+        path: "/projects",
+        element: <ProjectsPage />,
       },
     ],
   },

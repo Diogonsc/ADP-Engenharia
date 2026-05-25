@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { fetchPublishedArticles } from "@/lib/articles-api";
+import { fetchFeaturedPublishedArticles } from "@/lib/articles-api";
 import type { Article } from "@/data/articles";
 
 function ArticleLink({
@@ -41,7 +41,7 @@ export function ArticlesSection() {
   const [articles, setArticles] = useState<Article[]>([]);
 
   useEffect(() => {
-    fetchPublishedArticles().then((data) => setArticles(data.slice(0, 3)));
+    fetchFeaturedPublishedArticles().then(setArticles);
   }, []);
 
   const featured = articles[0];

@@ -46,8 +46,10 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const activeSection = useActiveSection();
-  const isArticlesPage = location.pathname.startsWith("/articles");
-  const hasSolidBackground = isScrolled || isArticlesPage;
+  const isStandalonePage =
+    location.pathname.startsWith("/articles") ||
+    location.pathname.startsWith("/projects");
+  const hasSolidBackground = isScrolled || isStandalonePage;
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 80);

@@ -34,6 +34,9 @@ import {
   type ArticleFormData,
   type ArticleStatus,
 } from "@/data/articles";
+import { FeaturedField } from "@/components/admin/featured-field";
+import { getErrorMessage } from "@/lib/errors";
+import { MAX_FEATURED_ARTICLES } from "@/lib/featured";
 import { isRichTextEmpty } from "@/lib/rich-text";
 import {
   Dialog,
@@ -58,6 +61,7 @@ const defaultForm: ArticleFormData = {
   category: "lt",
   image: "",
   status: "draft",
+  featured: false,
 };
 
 export function ArticleForm({
@@ -75,6 +79,7 @@ export function ArticleForm({
           category: initialData.category,
           image: initialData.image,
           status: initialData.status,
+          featured: initialData.featured,
         }
       : defaultForm,
   );
@@ -110,6 +115,8 @@ export function ArticleForm({
     setSubmitting(true);
     try {
       await onSubmit(form);
+    } catch (err) {
+      window.alert(getErrorMessage(err, "Erro ao salvar o artigo."));
     } finally {
       setSubmitting(false);
     }
@@ -215,6 +222,14 @@ export function ArticleForm({
               />
             </div>
           </div>
+
+          <FeaturedField
+            id="featured"
+            checked={form.featured}
+            maxItems={MAX_FEATURED_ARTICLES}
+            entityLabel="Artigos publicados"
+            onChange={(featured) => updateField("featured", featured)}
+          />
 
           <div>
             <Label htmlFor="excerpt" className={adminLabelClassName}>

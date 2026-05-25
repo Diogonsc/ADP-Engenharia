@@ -19,6 +19,7 @@ type ArticleRow = {
   category: ArticleCategory;
   image_url: string | null;
   status: ArticleStatus;
+  featured: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -31,9 +32,11 @@ type ProjectRow = {
   meta: string;
   category: ProjectCategory;
   image_url: string | null;
+  video_url: string | null;
   description: string;
   highlights: string[];
   order: number;
+  featured: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -51,6 +54,7 @@ export interface Database {
           category: ArticleCategory;
           image_url?: string | null;
           status?: ArticleStatus;
+          featured?: boolean;
         };
         Update: {
           slug?: string;
@@ -60,6 +64,7 @@ export interface Database {
           category?: ArticleCategory;
           image_url?: string | null;
           status?: ArticleStatus;
+          featured?: boolean;
         };
         Relationships: [];
       };
@@ -72,9 +77,11 @@ export interface Database {
           meta?: string;
           category: ProjectCategory;
           image_url?: string | null;
+          video_url?: string | null;
           description?: string;
           highlights?: string[];
           order?: number;
+          featured?: boolean;
         };
         Update: {
           title?: string;
@@ -83,9 +90,11 @@ export interface Database {
           meta?: string;
           category?: ProjectCategory;
           image_url?: string | null;
+          video_url?: string | null;
           description?: string;
           highlights?: string[];
           order?: number;
+          featured?: boolean;
         };
         Relationships: [];
       };

@@ -11,6 +11,7 @@ import {
   fetchProjects,
   createProject as apiCreate,
   updateProject as apiUpdate,
+  setProjectFeatured as apiSetFeatured,
   deleteProject as apiDelete,
 } from "@/lib/projects-api";
 import { getErrorMessage } from "@/lib/errors";
@@ -22,6 +23,7 @@ type ProjectsContextValue = {
   getProjectById: (id: number) => Project | undefined;
   createProject: (data: ProjectFormData) => Promise<Project>;
   updateProject: (id: number, data: ProjectFormData) => Promise<Project>;
+  setProjectFeatured: (id: number, featured: boolean) => Promise<Project>;
   deleteProject: (id: number, imageUrl?: string) => Promise<void>;
   refetch: () => Promise<void>;
 };
@@ -78,6 +80,16 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const setProjectFeatured = useCallback(async (id: number, featured: boolean) => {
+    const updated = await apiSetFeatured(id, featured);
+    setProjects((prev) =>
+      prev
+        .map((p) => (p.id === id ? updated : p))
+        .sort((a, b) => a.order - b.order),
+    );
+    return updated;
+  }, []);
+
   const deleteProject = useCallback(async (id: number, imageUrl?: string) => {
     await apiDelete(id, imageUrl);
     setProjects((prev) => prev.filter((p) => p.id !== id));
@@ -91,6 +103,7 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
       getProjectById,
       createProject,
       updateProject,
+      setProjectFeatured,
       deleteProject,
       refetch: load,
     }),
@@ -101,6 +114,7 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
       getProjectById,
       createProject,
       updateProject,
+      setProjectFeatured,
       deleteProject,
       load,
     ],
