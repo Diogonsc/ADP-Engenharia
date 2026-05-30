@@ -55,7 +55,7 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="site-footer border-t border-white/6 bg-[#0a0b09]">
+    <footer className="site-footer noise-overlay border-t border-white/6 bg-[#0a0b09]">
       <div className={cn(containerPx, "py-[72px] pb-8")}>
         <div
           className={cn(

@@ -1,3 +1,5 @@
+import { getLenis } from "@/hooks/use-lenis";
+
 export function getHeaderOffset() {
   if (typeof window === "undefined") return 56;
 
@@ -14,6 +16,16 @@ export function getHeaderOffset() {
   return parsed;
 }
 
+export function smoothScrollTo(top: number) {
+  const lenis = getLenis();
+  if (lenis) {
+    lenis.scrollTo(top);
+    return;
+  }
+
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
 export function scrollToSection(sectionId: string) {
   const element = document.getElementById(sectionId);
   if (!element) return;
@@ -21,6 +33,6 @@ export function scrollToSection(sectionId: string) {
   const top =
     element.getBoundingClientRect().top + window.scrollY - getHeaderOffset();
 
-  window.scrollTo({ top, behavior: "smooth" });
+  smoothScrollTo(top);
   window.history.replaceState(null, "", `/#${sectionId}`);
 }

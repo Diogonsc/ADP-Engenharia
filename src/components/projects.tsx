@@ -75,6 +75,7 @@ export function Projects() {
             <Card
               key={project.id}
               className="project-card group gap-0 overflow-hidden rounded-md bg-bg-primary py-0 shadow-none ring-0 cursor-pointer"
+              data-cursor="view"
               data-animate
               onClick={() => setSelectedProject(project)}
             >
@@ -82,19 +83,14 @@ export function Projects() {
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06] group-focus-within:scale-[1.06]"
                   loading="lazy"
                   decoding="async"
                 />
-                <div className="absolute inset-0 flex flex-col justify-end bg-linear-to-t from-[rgba(17,18,16,0.8)] via-transparent to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
-                  <span className="text-xs text-white/80">{project.type}</span>
-                  <button
-                    type="button"
-                    className="mt-1 w-fit text-left text-[13px] font-semibold text-white transition-colors hover:text-brand-vivid focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-vivid/50"
-                    onClick={() => setSelectedProject(project)}
-                  >
+                <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-all duration-300 group-hover:bg-black/40 group-focus-within:bg-black/40">
+                  <span className="text-sm font-semibold text-white opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0">
                     Ver projeto →
-                  </button>
+                  </span>
                 </div>
               </div>
               <CardContent className="p-4">

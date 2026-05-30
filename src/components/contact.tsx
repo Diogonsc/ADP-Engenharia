@@ -85,7 +85,13 @@ export function Contact() {
   return (
     <section
       id={SECTION_IDS.contact}
-      className={cn(sectionDark, sectionScroll, containerPx, sectionPy)}
+      className={cn(
+        "noise-overlay",
+        sectionDark,
+        sectionScroll,
+        containerPx,
+        sectionPy,
+      )}
     >
       <div className={container}>
         <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">

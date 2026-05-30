@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { useInView } from "motion/react";
 import { SECTION_IDS } from "@/lib/sections";
 import {
   bodyText,
@@ -39,18 +40,13 @@ type MetricProps = {
   suffix?: string;
   unit?: string;
   label: string;
-  enabled: boolean;
+  dataValue: string;
 };
 
-function MetricCard({
-  value,
-  suffix,
-  unit,
-  label,
-  enabled,
-  dataValue,
-}: MetricProps & { dataValue: string }) {
-  const count = useCountUp(value, enabled);
+function MetricCard({ value, suffix, unit, label, dataValue }: MetricProps) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const count = useCountUp(value, isInView, 1800);
 
   return (
     <Card
@@ -59,7 +55,7 @@ function MetricCard({
       data-animate
     >
       <CardContent className="flex flex-col gap-2 p-7 sm:p-8">
-        <span className="metric-value font-display text-primary">
+        <span ref={ref} className="metric-value font-display text-primary">
           {count}
           {suffix && (
             <span className="metric-value-suffix text-brand">{suffix}</span>
@@ -77,27 +73,6 @@ function MetricCard({
 }
 
 export function About() {
-  const metricsRef = useRef<HTMLDivElement>(null);
-  const [metricsVisible, setMetricsVisible] = useState(false);
-
-  useEffect(() => {
-    const node = metricsRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setMetricsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section
       id={SECTION_IDS.about}
@@ -145,37 +120,30 @@ export function About() {
           </div>
         </div>
 
-        <div
-          ref={metricsRef}
-          className="grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-border"
-        >
+        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-border">
           <MetricCard
             value={15}
             suffix="+"
             dataValue="15"
             label="Anos de experiência no setor elétrico"
-            enabled={metricsVisible}
           />
           <MetricCard
             value={80}
             suffix="+"
             dataValue="80"
             label="Projetos técnicos entregues"
-            enabled={metricsVisible}
           />
           <MetricCard
             value={500}
             unit="kV"
             dataValue="500"
             label="Maior nível de tensão atendido"
-            enabled={metricsVisible}
           />
           <MetricCard
             value={100}
             unit="%"
             dataValue="100"
             label="Projetos concluídos no prazo acordado"
-            enabled={metricsVisible}
           />
         </div>
       </div>

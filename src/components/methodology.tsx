@@ -39,7 +39,13 @@ export function Methodology() {
   return (
     <section
       id={SECTION_IDS.methodology}
-      className={cn(sectionDark, sectionScroll, containerPx, sectionPy)}
+      className={cn(
+        "noise-overlay",
+        sectionDark,
+        sectionScroll,
+        containerPx,
+        sectionPy,
+      )}
     >
       <div className={container}>
         <div className="max-w-[560px]" data-animate>

@@ -132,6 +132,13 @@
   html {
     @apply scroll-smooth;
   }
+
+  @media (min-width: 768px) {
+    html.custom-cursor-active,
+    html.custom-cursor-active * {
+      cursor: none !important;
+    }
+  }
 }
 
 @layer components {
@@ -697,22 +704,6 @@
   /* Navbar */
   .navbar.scrolled {
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .navbar__link.active {
-    color: var(--color-brand-vivid) !important;
-    position: relative;
-  }
-
-  .navbar__link.active::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--color-brand-vivid);
-    border-radius: 1px;
   }
 
   /* Footer */

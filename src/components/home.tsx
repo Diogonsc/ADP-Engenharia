@@ -1,7 +1,9 @@
 import { useRef, type CSSProperties } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router";
+import { motion, useInView } from "motion/react";
 import { Button } from "@/components/ui/button";
+import { useCountUp } from "@/hooks/use-count-up";
 import { useHeroParallax } from "@/hooks/use-hero-parallax";
 import { SECTION_IDS } from "@/lib/sections";
 import { container, containerPx, overline, sectionScroll } from "@/lib/layout";
@@ -9,11 +11,64 @@ import { cn } from "@/lib/utils";
 import { ResponsiveImage } from "@/components/responsive-image";
 import { heroImage } from "@/lib/optimized-images";
 
-const proofItems = [
-  { number: "15+", label: "anos de experiência" },
-  { number: "80+", label: "projetos entregues" },
-  { number: "500kV", label: "maior tensão atendida" },
+const titleLines = [
+  ["Projetos", "de", "LT", "e", "SE"],
+  ["com", "integração"],
+  ["multidisciplinar."],
 ] as const;
+
+const proofItems = [
+  { end: 15, suffix: "+", label: "anos de experiência" },
+  { end: 80, suffix: "+", label: "projetos entregues" },
+  { end: 500, unit: "kV", label: "maior tensão atendida" },
+] as const;
+
+const titleContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const wordVariants = {
+  hidden: {
+    opacity: 0,
+    y: 40,
+    filter: "blur(8px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.7,
+      ease: [0.25, 0.46, 0.45, 0.94] as const,
+    },
+  },
+};
+
+type ProofNumberProps = {
+  end: number;
+  suffix?: string;
+  unit?: string;
+};
+
+function ProofNumber({ end, suffix, unit }: ProofNumberProps) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const count = useCountUp(end, isInView, 1800);
+
+  return (
+    <span ref={ref} className="hero__proof-number block font-display">
+      {count}
+      {suffix}
+      {unit}
+    </span>
+  );
+}
 
 export function Home() {
   const mediaRef = useRef<HTMLDivElement>(null);
@@ -22,7 +77,10 @@ export function Home() {
   return (
     <section
       id={SECTION_IDS.home}
-      className={cn("hero relative min-h-[108dvh]", sectionScroll)}
+      className={cn(
+        "hero relative flex min-h-svh max-h-svh shrink-0 flex-col",
+        sectionScroll,
+      )}
     >
       <div ref={mediaRef} className="hero__media" aria-hidden>
         <ResponsiveImage
@@ -48,7 +106,7 @@ export function Home() {
 
       <div
         className={cn(
-          "hero__content relative z-2 flex min-h-[108dvh] items-center",
+          "hero__content relative z-2 flex min-h-0 flex-1 items-center",
           containerPx,
           "pt-[120px] pb-28 md:pt-[140px] md:pb-32",
         )}
@@ -61,16 +119,35 @@ export function Home() {
             Engenharia Especializada
           </span>
 
-          <h1
-            className="hero__reveal font-display text-[clamp(38px,6.2vw,76px)] font-bold leading-[1.02] tracking-[-0.025em] text-white"
-            style={{ "--hero-i": 1 } as CSSProperties}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={titleContainerVariants}
           >
-            Projetos de LT e SE
-            <br />
-            com integração
-            <br />
-            multidisciplinar.
-          </h1>
+            <h1 className="font-display text-[clamp(38px,6.2vw,76px)] font-bold leading-[1.02] tracking-[-0.025em] text-white">
+              {titleLines.map((line) => (
+                <span key={line.join("-")} className="block">
+                  {line.map((word, wordIndex) => (
+                    <motion.span
+                      key={`${word}-${wordIndex}`}
+                      variants={wordVariants}
+                      className="mr-[0.28em] inline-block last:mr-0"
+                    >
+                      {word}
+                    </motion.span>
+                  ))}
+                </span>
+              ))}
+            </h1>
+
+            <motion.div
+              className="mt-6 h-0.5 bg-brand-vivid"
+              initial={{ width: 0 }}
+              animate={{ width: 120 }}
+              transition={{ duration: 0.7, ease: "easeOut", delay: 0.6 }}
+              aria-hidden
+            />
+          </motion.div>
 
           <p
             className="hero__reveal mt-7 max-w-[600px] text-base font-light leading-[1.7] text-white/75 sm:text-lg sm:leading-[1.75]"
@@ -97,9 +174,11 @@ export function Home() {
                   />
                 )}
                 <div className="hero__proof-item min-w-0">
-                  <span className="hero__proof-number block font-display">
-                    {item.number}
-                  </span>
+                  <ProofNumber
+                    end={item.end}
+                    suffix={"suffix" in item ? item.suffix : undefined}
+                    unit={"unit" in item ? item.unit : undefined}
+                  />
                   <span className="hero__proof-label mt-2 block">
                     {item.label}
                   </span>
@@ -125,16 +204,6 @@ export function Home() {
             </Button>
           </div>
         </div>
-      </div>
-
-      <div
-        className="hero__scroll-hint absolute inset-x-0 bottom-10 z-2 flex flex-col items-center gap-2.5"
-        aria-hidden
-      >
-        <span className="text-[10px] uppercase tracking-[0.18em] text-white/35">
-          scroll
-        </span>
-        <div className="h-11 w-px animate-scroll-pulse bg-linear-to-b from-white/35 to-transparent" />
       </div>
     </section>
   );

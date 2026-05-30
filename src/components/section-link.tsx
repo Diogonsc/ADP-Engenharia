@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router";
+import { motion } from "motion/react";
 import type { SectionId } from "@/lib/sections";
 import { scrollToSection } from "@/lib/scroll-to-section";
 import { cn } from "@/lib/utils";
@@ -52,11 +53,7 @@ export function SectionLink({
   return (
     <Link
       to={{ pathname: "/", hash: sectionId }}
-      className={cn(
-        variantClasses[variant],
-        variant === "navbar" && isActive && "navbar__link active",
-        className,
-      )}
+      className={cn(variantClasses[variant], className)}
       onClick={(event) => {
         if (!isOnLanding) return;
 
@@ -66,6 +63,13 @@ export function SectionLink({
       }}
     >
       {label}
+      {variant === "navbar" && isActive && (
+        <motion.div
+          layoutId="nav-indicator"
+          className="absolute bottom-0 left-0 h-0.5 w-full rounded-sm bg-brand-vivid"
+          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+        />
+      )}
     </Link>
   );
 }
