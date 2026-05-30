@@ -106,9 +106,9 @@ export function Home() {
 
       <div
         className={cn(
-          "hero__content relative z-2 flex min-h-0 flex-1 items-center",
+          "hero__content relative z-2 flex min-h-0 flex-1 flex-col items-start justify-start overflow-y-auto md:items-center md:justify-center md:overflow-visible",
           containerPx,
-          "pt-[120px] pb-28 md:pt-[140px] md:pb-32",
+          "pt-[calc(var(--header-height)+1.5rem)] pb-20 md:pt-[140px] md:pb-32",
         )}
       >
         <div className={cn(container, "max-w-[800px]")}>
