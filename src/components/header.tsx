@@ -96,10 +96,8 @@ export function Header() {
     <>
       <header
         className={cn(
-          "navbar fixed inset-x-0 top-0 z-[1000] border-b transition-all duration-300 ease-out",
-          hasSolidBackground
-            ? "border-white/10 bg-black/80 backdrop-blur-md"
-            : "border-transparent bg-transparent",
+          "navbar fixed inset-x-0 top-0 z-[1000] border-b bg-bg-dark transition-all duration-300 ease-out",
+          hasSolidBackground ? "border-white/10" : "border-transparent",
         )}
       >
         <div
@@ -165,7 +163,7 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="fixed inset-0 z-[1001] bg-black/95 backdrop-blur-xl lg:hidden"
+            className="fixed inset-0 z-[1001] bg-bg-dark lg:hidden"
             aria-label="Navegação mobile"
           >
             <div className={cn("flex h-full flex-col", containerPx)}>

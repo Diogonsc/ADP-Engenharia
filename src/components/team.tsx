@@ -96,9 +96,9 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
   return (
     <MotionCard
       variants={teamCardVariants}
-      className="project-card group gap-0 overflow-hidden rounded-md border border-border bg-bg-primary py-0 shadow-none ring-0 focus-within:shadow-[0_8px_32px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)]"
+      className="project-card group flex h-full flex-col gap-0 overflow-hidden rounded-md border border-border bg-bg-primary py-0 shadow-none ring-0 focus-within:shadow-[0_8px_32px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)]"
     >
-      <div className="project-card__image relative aspect-4/3 overflow-hidden">
+      <div className="project-card__image relative aspect-[4/5] overflow-hidden">
         <img
           src={member.image}
           alt={member.name}
@@ -111,13 +111,13 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
 
         <div
           className={cn(
-            "absolute inset-0 flex flex-col justify-end bg-linear-to-t from-black/90 via-black/50 to-transparent p-5",
+            "absolute inset-0 flex flex-col justify-end bg-linear-to-t from-black/95 via-black/75 via-45% to-transparent p-5 sm:p-6",
             "opacity-0 transition-opacity duration-400 group-hover:opacity-100 group-focus-within:opacity-100",
           )}
         >
           <p
             className={cn(
-              "max-h-40 overflow-y-auto text-sm leading-relaxed text-white/90",
+              "max-h-72 overflow-y-auto text-sm leading-[1.65] text-white/90 sm:max-h-72 sm:text-[15px]",
               "translate-y-4 transition-transform duration-400 delay-75",
               "group-hover:translate-y-0 group-focus-within:translate-y-0",
             )}
@@ -127,14 +127,14 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
         </div>
       </div>
 
-      <CardContent className="flex flex-col p-5 sm:p-6">
-        <h3 className="text-base font-semibold leading-snug text-text-primary">
+      <CardContent className="flex flex-1 flex-col p-4 sm:p-5">
+        <h3 className="min-h-10 line-clamp-2 text-base font-semibold leading-snug text-text-primary">
           {member.name}
         </h3>
-        <span className="mb-5 mt-1.5 inline-block text-[11px] font-semibold uppercase tracking-[0.06em] text-brand">
+        <p className="mt-1 min-h-16 flex-1 text-[11px] font-semibold uppercase leading-relaxed tracking-[0.06em] text-brand line-clamp-4">
           {member.role}
-        </span>
-        <div className="flex flex-wrap gap-2 border-t border-border pt-4">
+        </p>
+        <div className="mt-auto flex min-h-12 flex-wrap items-center gap-2 border-t border-border pt-3">
           {member.socials.map((social) => (
             <TeamSocialLink key={social.label} social={social} />
           ))}
@@ -161,7 +161,7 @@ export function Team() {
         </div>
 
         <motion.div
-          className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          className="grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-3"
           style={{ perspective: 800 }}
           variants={teamGridVariants}
           initial="hidden"

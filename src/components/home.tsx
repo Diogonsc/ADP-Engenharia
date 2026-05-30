@@ -78,7 +78,7 @@ export function Home() {
     <section
       id={SECTION_IDS.home}
       className={cn(
-        "hero relative flex min-h-svh max-h-svh shrink-0 flex-col",
+        "hero relative flex min-h-svh shrink-0 flex-col md:max-h-svh",
         sectionScroll,
       )}
     >
@@ -106,9 +106,9 @@ export function Home() {
 
       <div
         className={cn(
-          "hero__content relative z-2 flex min-h-0 flex-1 flex-col items-start justify-start overflow-y-auto md:items-center md:justify-center md:overflow-visible",
+          "hero__content relative z-2 flex flex-1 flex-col items-start justify-start md:min-h-0 md:items-center md:justify-center",
           containerPx,
-          "pt-[calc(var(--header-height)+1.5rem)] pb-20 md:pt-[140px] md:pb-32",
+          "pt-[calc(var(--header-height)+1.5rem)] pb-16 md:pt-[140px] md:pb-32",
         )}
       >
         <div className={cn(container, "max-w-[800px]")}>
@@ -159,7 +159,7 @@ export function Home() {
           </p>
 
           <div
-            className="hero__proof hero__reveal mt-12 grid w-full gap-6 sm:mt-14 sm:w-fit sm:grid-flow-col sm:gap-0"
+            className="hero__proof hero__reveal mt-8 grid w-full gap-5 sm:mt-14 sm:w-fit sm:grid-flow-col sm:gap-0"
             style={{ "--hero-i": 3 } as CSSProperties}
           >
             {proofItems.map((item, index) => (
@@ -188,7 +188,7 @@ export function Home() {
           </div>
 
           <div
-            className="hero__reveal mt-12 flex flex-col gap-3 sm:mt-14 sm:flex-row sm:flex-wrap"
+            className="hero__reveal mt-8 flex flex-col gap-3 sm:mt-14 sm:flex-row sm:flex-wrap"
             style={{ "--hero-i": 4 } as CSSProperties}
           >
             <Button asChild className="w-full sm:w-auto">
